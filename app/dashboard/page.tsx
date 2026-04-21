@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { auth, signOut } from "@/auth"
-import { sql } from "@/lib/db"
+import { sql, createTable } from "@/lib/db"
 import { getBalance } from "@/lib/locus"
 import type { PreviewEnvironment } from "@/types"
 import AutoRefresh from "./refresh"
@@ -47,6 +47,8 @@ export default async function DashboardPage() {
   if (!session) redirect("/login")
 
   const username = session.githubUsername
+
+  await createTable()
 
   const { rows: envs } = await sql<PreviewEnvironment>`
     SELECT * FROM preview_environments
